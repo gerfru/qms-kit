@@ -1,0 +1,47 @@
+[project]
+name = "qms-kit"
+version = "0.1.0"
+description = "Reusable ISO 9001 QMS deployment kit"
+requires-python = ">=3.12"
+dependencies = [
+    "jinja2>=3.1",
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+    "requests>=2.31",
+    "click>=8.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "mypy>=1.10",
+    "bandit>=1.8",
+    "types-pyyaml>=6.0",
+    "types-requests>=2.31",
+]
+
+[project.scripts]
+qms-kit = "cli.main:cli"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.12"
+strict = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]
