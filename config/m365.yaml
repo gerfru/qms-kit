@@ -1,0 +1,25 @@
+# Microsoft 365 overlay — SharePoint (docs) + Power Automate (workflows)  [Phase 3]
+# NOTE (belegt): PnP template engine is PowerShell/.NET-native.
+# The m365 adapter shells out to PnP PowerShell. See adapters/m365/.
+
+target: m365
+
+organisation:
+  name: "TODO"
+  short: "TODO"
+  quality_officer: "TODO"
+  management: "TODO"
+
+sharepoint:
+  site_url: "TODO: https://<tenant>.sharepoint.com/sites/QMS"
+  client_id: "TODO"
+  tenant_id: "TODO"
+  # client_secret via env: SHAREPOINT_CLIENT_SECRET
+  document_library: "QM-Dokumente"
+
+power_automate:
+  # Place exported flow definitions in adapters/m365/flows/
+  # TODO: configure flow IDs after manual import into Power Automate
+  approval_flow_id: "TODO"
+  capa_routing_flow_id: "TODO"
+  review_reminder_flow_id: "TODO"

@@ -12,8 +12,9 @@ venv/
 dist/
 build/
 
-# Secrets & client configs
-config/clients/
+# Secrets & client configs — track directory structure but not actual client files
+config/clients/*
+!config/clients/.gitkeep
 
 # OS
 .DS_Store

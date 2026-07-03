@@ -1,0 +1,27 @@
+# Atlassian overlay — Confluence (docs) + Jira (records)  [Phase 2, not yet implemented]
+# TODO: fill all fields before running: deploy --target atlassian
+
+target: atlassian
+
+organisation:
+  name: "TODO"
+  short: "TODO"
+  quality_officer: "TODO"
+  management: "TODO"
+
+confluence:
+  base_url: "TODO: https://<org>.atlassian.net/wiki"
+  space_key: "TODO: QMS"
+  # token via env: CONFLUENCE_API_TOKEN
+  # NOTE (belegt): approval workflow not native in Confluence Cloud.
+  # Requires Marketplace app (e.g. Comala). Partially automatable only.
+
+jira:
+  base_url: "TODO: https://<org>.atlassian.net"
+  project_key: "TODO: QMS"
+  # token via env: JIRA_API_TOKEN
+  issue_type_mapping:
+    nc: "TODO"
+    capa: "TODO"
+    audit: "TODO"
+    kpi: "TODO"
