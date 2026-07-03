@@ -1,0 +1,31 @@
+# Self-hosted overlay — XWiki (docs) + Redmine (records)  (bestätigt)
+# Copy per client: cp config/selfhosted.yaml config/clients/<client>.yaml
+
+target: selfhosted
+
+organisation:           # overrides core.yaml placeholders for this client
+  name: "TODO: Kundenname GmbH"
+  short: "TODO: KD"
+  quality_officer: "TODO: Vorname Nachname"
+  management: "TODO: Vorname Nachname"
+
+xwiki:
+  base_url: "http://localhost:8080"   # TODO: production URL
+  space_key: "QMS"
+  username: "TODO"
+  # password via env: XWIKI_PASSWORD
+  parent_page: "QM-Handbuch"
+  # [Nicht verifiziert] Approval/publication workflow may require XWiki Extension.
+  # TODO: verify extension availability and configure approval_extension here.
+
+redmine:
+  base_url: "http://localhost:3000"   # TODO: production URL
+  project_key: "qms"
+  # api_key via env: REDMINE_API_KEY
+  # IMPORTANT (verifiziert): custom field DEFINITIONS cannot be created via API.
+  # Run manual setup once before deploying. See docs/redmine-setup.md.
+  tracker_mapping:
+    nc: "Nichtkonformität"    # must match tracker name in Redmine
+    capa: "CAPA"
+    audit: "Internes Audit"
+    kpi: "KPI-Messung"
