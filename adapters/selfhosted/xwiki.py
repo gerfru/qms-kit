@@ -43,7 +43,7 @@ class XWikiAdapter:
 
     def create_or_update_page(self, page_name: str, title: str, content: str) -> None:
         """Idempotent: creates the page if absent, updates content if present."""
-        payload = {"title": title, "content": content, "syntax": "markdown/1.2"}
+        payload = {"title": title, "content": content, "syntax": "xwiki/2.1"}
         self._put(self._page_url(page_name), payload)
 
     def deploy(self, rendered_pages: dict[str, tuple[str, str]]) -> None:

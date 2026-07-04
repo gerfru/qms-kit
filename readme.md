@@ -25,10 +25,9 @@ Fill in your organisation's content over the following two weeks.
 
 **qms-kit deploys the structure. You fill in the content.**
 
-One command wires up spaces, document templates, issue trackers, approval workflows, and KPI
-dashboards for ISO 9001 clauses 4–10 — in XWiki + Redmine (self-hosted), Confluence + Jira
-(Atlassian), or SharePoint + Power Automate (M365).
-Reuse the same kit for every client; swap the overlay config.
+One command wires up spaces, document templates, issue trackers, and KPI dashboards for
+ISO 9001 clauses 4–10 — in XWiki + Redmine (self-hosted), Confluence + Jira (Atlassian),
+or SharePoint + Power Automate (M365). Reuse the same kit for every client; swap the overlay config.
 
 > ⚠️ **Scope:** qms-kit delivers a documentation scaffold for internal maturity and
 > customer/second-party audits. Accredited certification requires an additional operating phase
@@ -41,8 +40,8 @@ Reuse the same kit for every client; swap the overlay config.
 - 📋 **ISO 9001 clauses 4–10 as structure** — every space, page, and tracker maps to a clause.
 - ⚙️ **Config-driven, idempotent** — declare your QMS in YAML; run deploy as often as needed.
 - 🔁 **Multi-tenant** — one core config, one overlay per client. No copy-paste between engagements.
-- 🧩 **Adapter model** — self-hosted, Atlassian, and M365 are interchangeable modules; the core never changes.
-- 📄 **Jinja2 templates** — policy, procedure, management review agenda, audit checklist, CAPA form — all with placeholders, ready to hand to your client.
+- 🧩 **Adapter model** — self-hosted, Atlassian, and M365 are interchangeable modules.
+- 📄 **Jinja2 templates** — quality policy, procedures, management review agenda, internal audit checklist, CAPA form — all with placeholders, ready to hand to your client.
 
 ---
 
@@ -50,33 +49,44 @@ Reuse the same kit for every client; swap the overlay config.
 
 | Layer | What |
 |-------|------|
-| **Structure** | Space / site / project, document tree, naming conventions |
+| **Structure** | Space / project, document tree, naming conventions |
 | **Document templates** | Quality policy, procedures, MR agenda, internal audit checklist, CAPA/NC form |
-| **Record containers** | Issue schemas for NC, CAPA, audits, objectives/KPIs |
-| **Workflows** | Approval/review routing, CAPA escalation, review reminders |
-| **Dashboards** | KPI and status overview |
+| **Record containers** | Issue trackers for NC, CAPA, audits, KPIs |
 
 ---
 
 ## 🚀 Quickstart
 
-> Self-hosted target (XWiki + Redmine via Docker Compose):
+Self-hosted target (XWiki + Redmine via Docker Compose):
 
 ```bash
-# 1. Copy and fill in your client overlay
-cp config/selfhosted.yaml config/clients/acme.yaml
-# edit acme.yaml: org name, XWiki URL, Redmine URL, credentials
+# 1. Clone and install
+git clone https://github.com/gerfru/qms-kit.git
+cd qms-kit
+uv sync
 
-# 2. Start the stack (first time only — brings up XWiki + Redmine)
-docker compose -f adapters/selfhosted/docker-compose.yml up -d
+# 2. Start XWiki + Redmine
+cp docker/.env.example docker/.env          # fill in passwords
+docker compose -f docker/docker-compose.yml up -d
 
-# 3. Seed the QMS scaffold
-python -m cli deploy --target selfhosted --config config/clients/acme.yaml
+# 3. One-time Redmine setup (manual — API limitation)
+# See docs/redmine-setup.md
+
+# 4. Create your client overlay
+cp config/clients/example.yaml config/clients/acme.yaml
+# edit acme.yaml: org name, URLs, credentials
+
+# 5. Dry-run first (no changes written)
+export XWIKI_PASSWORD=Admin
+export REDMINE_API_KEY=<your-key>
+qms-kit deploy --target selfhosted --config config/clients/acme.yaml --dry-run
+
+# 6. Deploy
+qms-kit deploy --target selfhosted --config config/clients/acme.yaml
 ```
 
-> **Note on Redmine custom fields:** Field *definitions* (Root Cause, Effectiveness Check, Status)
-> must be created once manually or via plugin — the Redmine API does not support creating them.
-> The deployer seeds projects, issues, and field *values* automatically.
+> **Redmine custom fields** (Root Cause, Effectiveness Check, etc.) must be created once
+> manually — the Redmine API does not support creating field definitions.
 > See [docs/redmine-setup.md](docs/redmine-setup.md).
 
 → Full walkthrough: **[docs/setup.md](docs/setup.md)**
@@ -87,7 +97,7 @@ python -m cli deploy --target selfhosted --config config/clients/acme.yaml
 
 | Target | Status | Stack |
 |--------|--------|-------|
-| **Self-hosted** | ✅ Phase 1 | XWiki (docs) + Redmine (records) via Docker |
+| **Self-hosted** | ✅ Phase 1 complete | XWiki (docs) + Redmine (records) via Docker |
 | **Atlassian** | 🔜 Phase 2 | Confluence + Jira via REST API |
 | **Microsoft 365** | 🔜 Phase 3 | SharePoint + Power Automate via PnP PowerShell |
 
@@ -111,11 +121,10 @@ python -m cli deploy --target selfhosted --config config/clients/acme.yaml
 
 ## 🧱 Stack
 
-Python · Jinja2 · YAML · Docker Compose · XWiki REST API · Redmine REST API
+Python · Jinja2 · Pydantic · YAML · Click · Docker Compose · XWiki REST API · Redmine REST API
 
 Three layers above the adapters: a config loader with Pydantic schema validation, a Jinja2
-template renderer, and a single CLI entry point (`deploy --target`).
-M365 adapter shells out to PnP PowerShell; everything else is pure Python.
+template renderer, and a single CLI entry point (`qms-kit deploy --target`).
 
 ---
 
