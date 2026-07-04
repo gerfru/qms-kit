@@ -38,7 +38,7 @@ class TestBuildContext:
 class TestRenderTemplate:
     def test_policy_renders_org_name(self) -> None:
         result = render_template(
-            "policy.md.j2",
+            "policy.xwiki.j2",
             _make_config(),
             TEMPLATES_DIR,
             extra={"date": "2024-01-01"},
@@ -48,7 +48,7 @@ class TestRenderTemplate:
 
     def test_procedure_renders_title(self) -> None:
         result = render_template(
-            "procedure.md.j2",
+            "procedure.xwiki.j2",
             _make_config(),
             TEMPLATES_DIR,
             extra={
@@ -66,7 +66,7 @@ class TestRenderTemplate:
 
     def test_capa_form_renders(self) -> None:
         result = render_template(
-            "capa_form.md.j2",
+            "capa_form.xwiki.j2",
             _make_config(),
             TEMPLATES_DIR,
             extra={

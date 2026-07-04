@@ -54,7 +54,7 @@ def deploy(target: str, config_path: Path, dry_run: bool) -> None:
     for doc in config.documents:
         if doc.template is None:
             continue
-        template_file = f"{doc.template}.md.j2"
+        template_file = f"{doc.template}.xwiki.j2"
         content = render_template(
             template_name=template_file,
             config=config,
