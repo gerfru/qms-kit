@@ -51,6 +51,16 @@ def deploy(target: str, config_path: Path, dry_run: bool) -> None:
 
     # Render all templates that have a template key set
     rendered: dict[str, tuple[str, str]] = {}
+
+    # Space index page
+    index_content = render_template(
+        template_name="qms_index.md.j2",
+        config=config,
+        templates_dir=TEMPLATES_DIR,
+    )
+    rendered["qms_index"] = ("QM Manual", index_content)
+    click.echo("  Rendered: qms_index (qms_index.md.j2)")
+
     for doc in config.documents:
         if doc.template is None:
             continue
