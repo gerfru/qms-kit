@@ -53,10 +53,7 @@ def md_to_xwiki(text: str) -> str:
             cells = [c.strip() for c in line.strip().strip("|").split("|")]
             # Detect header: previous non-empty line was also a table row,
             # next line is a separator — check next line
-            is_header = (
-                i + 1 < len(lines)
-                and re.match(r"^\|[\s\-:|]+\|", lines[i + 1])
-            )
+            is_header = i + 1 < len(lines) and re.match(r"^\|[\s\-:|]+\|", lines[i + 1])
             if is_header:
                 out.append("|=" + "|=".join(_md_inline(c) for c in cells))
             else:
@@ -138,10 +135,7 @@ class XWikiAdapter:
                 f"{self._base_url}/rest/wikis/xwiki"
                 f"/spaces/{self._space_key}/spaces/{parent}/pages/{page_name}"
             )
-        return (
-            f"{self._base_url}/rest/wikis/xwiki"
-            f"/spaces/{self._space_key}/pages/{page_name}"
-        )
+        return f"{self._base_url}/rest/wikis/xwiki/spaces/{self._space_key}/pages/{page_name}"
 
     def _put(self, url: str, payload: dict[str, Any]) -> None:
         resp = requests.put(url, json=payload, auth=self._auth, timeout=30)
