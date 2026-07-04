@@ -2,9 +2,7 @@
 
 from pathlib import Path
 
-import pytest
-
-from src.core.config import CoreConfig, load_config, _deep_merge
+from src.core.config import _deep_merge
 
 CORE_YAML = Path(__file__).parent.parent / "config" / "core.yaml"
 SELFHOSTED_YAML = Path(__file__).parent.parent / "config" / "selfhosted.yaml"

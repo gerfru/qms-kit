@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader, StrictUndefined
+from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoescape
 
 from src.core.config import CoreConfig
 
@@ -36,7 +36,7 @@ def render_template(
     env = Environment(
         loader=FileSystemLoader(str(templates_dir)),
         undefined=StrictUndefined,
-        autoescape=False,
+        autoescape=select_autoescape(enabled_extensions=("html",)),
         keep_trailing_newline=True,
     )
     template = env.get_template(template_name)

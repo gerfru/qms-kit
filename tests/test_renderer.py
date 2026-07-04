@@ -3,8 +3,6 @@
 from pathlib import Path
 from unittest.mock import MagicMock
 
-import pytest
-
 from src.core.renderer import build_context, render_template
 
 TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
