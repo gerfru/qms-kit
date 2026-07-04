@@ -1,0 +1,41 @@
+# Risk Register
+
+| Field | Value |
+|-------|-------|
+| **Organisation** | {{ org_name }} |
+| **Version** | {{ version }} |
+| **Last Review** | {{ date }} |
+| **Reviewed by** | {{ quality_officer }} |
+| **ISO Clause** | 6.1 |
+
+---
+
+## Risk Scoring
+
+**Likelihood:** 1 = Rare · 2 = Unlikely · 3 = Possible · 4 = Likely · 5 = Almost certain
+**Impact:** 1 = Negligible · 2 = Minor · 3 = Moderate · 4 = Major · 5 = Critical
+**Risk Level:** L × I → Low (1–4) / Medium (5–9) / High (10–25)
+**Treatment:** Accept · Mitigate · Transfer · Avoid
+
+## Risks
+
+| ID | Category | Risk | L | I | Level | Treatment | Action | Owner | Due | Status |
+|----|----------|------|---|---|-------|-----------|--------|-------|-----|--------|
+| R-001 | Process | Core processes undocumented — inconsistent output quality | 3 | 4 | **High** | Mitigate | Document all core procedures and train staff | {{ quality_officer }} | | Open |
+| R-002 | Personnel | Loss of key personnel with critical undocumented knowledge | 3 | 4 | **High** | Mitigate | Maintain competence matrix; cross-train staff | Management | | Open |
+| R-003 | Supplier | Single-source supplier failure disrupts delivery | 2 | 4 | **Medium** | Mitigate | Qualify alternative suppliers; maintain safety stock | Process Owner | | Open |
+| R-004 | Customer | Changing requirements not detected early enough | 3 | 3 | **Medium** | Mitigate | Regular customer reviews; structured requirements capture | Process Owner | | Open |
+| R-005 | Compliance | Regulatory or legal changes not tracked | 2 | 4 | **Medium** | Mitigate | Subscribe to regulatory updates; annual legal review | {{ quality_officer }} | | Open |
+| R-006 | IT / Data | Loss of QMS records due to system failure | 2 | 3 | **Medium** | Mitigate | Automated backups; tested recovery procedure | Management | | Open |
+
+## Opportunities
+
+| ID | Description | Potential Benefit | Owner | Status |
+|----|-------------|-------------------|-------|--------|
+| O-001 | Digitise manual QMS records | Faster retrieval, fewer transcription errors | {{ quality_officer }} | Identified |
+| O-002 | Customer co-development partnership | Earlier requirement capture; reduced rework | Management | Identified |
+| O-003 | Supplier development programme | Improved delivery reliability | Process Owner | Identified |
+
+---
+
+*ISO 9001:2015 · Clause 6.1 · {{ org_name }}*

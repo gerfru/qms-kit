@@ -43,7 +43,7 @@ clauses:
     documents: [resource_plan, competence_matrix, communication_plan, documented_info_procedure]
   - id: "8"
     title: "Operation"
-    documents: [process_map, customer_requirements_procedure, nonconformity_procedure]
+    documents: [process_map, customer_requirements_procedure, supplier_evaluation, nonconformity_procedure]
   - id: "9"
     title: "Performance Evaluation"
     documents: [internal_audit_procedure, management_review_procedure, kpi_dashboard]
@@ -81,7 +81,7 @@ documents:
   # Clause 6
   - id: risk_register
     title: "Risk Register"
-    template: null
+    template: risk_register
     clause: "6.1"
   - id: opportunity_register
     title: "Opportunity Register"
@@ -98,7 +98,7 @@ documents:
     clause: "7.1"
   - id: competence_matrix
     title: "Competency Matrix"
-    template: null
+    template: competence_matrix
     clause: "7.2"
   - id: communication_plan
     title: "Communication Plan"
@@ -117,6 +117,10 @@ documents:
     title: "Procedure: Determination of Customer Requirements"
     template: procedure
     clause: "8.2"
+  - id: supplier_evaluation
+    title: "Supplier Evaluation"
+    template: supplier_evaluation
+    clause: "8.4"
   - id: nonconformity_procedure
     title: "Procedure: Control of Nonconforming Outputs"
     template: procedure
@@ -132,7 +136,7 @@ documents:
     clause: "9.3"
   - id: kpi_dashboard
     title: "KPI Dashboard / Performance Indicators"
-    template: null
+    template: kpi_dashboard
     clause: "9.1"
   # Clause 10
   - id: capa_procedure
