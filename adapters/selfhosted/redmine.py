@@ -23,10 +23,12 @@ class RedmineAdapter:
     """
 
     def __init__(self, config: CoreConfig) -> None:
-        # TODO: extract Redmine settings from overlay config once overlay schema is wired
-        self._base_url = "http://localhost:3000"
+        if config.selfhosted is None:
+            raise ValueError("selfhosted config block is required for target=selfhosted")
+        redmine = config.selfhosted.redmine
+        self._base_url = redmine.base_url.rstrip("/")
+        self._project_key = redmine.project_key
         self._api_key = os.environ.get("REDMINE_API_KEY", "")
-        self._project_key = "qms"
         self._config = config
 
     @property
@@ -38,7 +40,7 @@ class RedmineAdapter:
         resp.raise_for_status()
         return resp.json()
 
-    def _post(self, path: str, payload: dict) -> Any:
+    def _post(self, path: str, payload: dict[str, Any]) -> Any:
         resp = requests.post(
             f"{self._base_url}{path}", json=payload, headers=self._headers, timeout=30
         )

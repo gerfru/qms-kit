@@ -1,0 +1,33 @@
+# Example client overlay — copy and fill in per client.
+# This file is safe to commit (no secrets). Passwords/keys go in env vars.
+#
+# Usage:
+#   cp config/clients/example.yaml config/clients/acme.yaml
+#   # edit acme.yaml, then:
+#   qms-kit deploy --target selfhosted --config config/clients/acme.yaml
+
+target: selfhosted
+
+organisation:
+  name: "Acme GmbH"
+  short: "ACM"
+  quality_officer: "Jane Smith"
+  management: "John Doe"
+
+selfhosted:
+  xwiki:
+    base_url: "https://wiki.acme.example"
+    space_key: "QMS"
+    username: "admin"
+    # export XWIKI_PASSWORD=<password>
+    parent_page: "QM Manual"
+
+  redmine:
+    base_url: "https://redmine.acme.example"
+    project_key: "qms-acme"
+    # export REDMINE_API_KEY=<api-key>
+    tracker_mapping:
+      nc: "Nonconformity"
+      capa: "CAPA"
+      audit: "Internal Audit"
+      kpi: "KPI Measurement"

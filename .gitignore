@@ -15,6 +15,7 @@ build/
 # Secrets & client configs — track directory structure but not actual client files
 config/clients/*
 !config/clients/.gitkeep
+!config/clients/example.yaml
 
 # OS
 .DS_Store

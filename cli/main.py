@@ -87,20 +87,18 @@ def deploy(target: str, config_path: Path, dry_run: bool) -> None:
 def _deploy_selfhosted(config: object, rendered: dict[str, tuple[str, str]]) -> None:
     from adapters.selfhosted.redmine import RedmineAdapter
     from adapters.selfhosted.xwiki import XWikiAdapter
+    from src.core.config import CoreConfig
+
+    cfg = config if isinstance(config, CoreConfig) else None
+    if cfg is None or cfg.selfhosted is None:
+        raise click.ClickException("selfhosted config block missing in overlay.")
 
     click.echo("\nDeploying to self-hosted (XWiki + Redmine)...")
 
-    xwiki = XWikiAdapter(config)  # type: ignore[arg-type]
+    xwiki = XWikiAdapter(cfg)
     xwiki.deploy(rendered)
 
-    # TODO: load tracker_mapping from overlay config
-    tracker_mapping = {
-        "nc": "Nonconformity",
-        "capa": "CAPA",
-        "audit": "Internal Audit",
-        "kpi": "KPI Measurement",
-    }
-    redmine = RedmineAdapter(config)  # type: ignore[arg-type]
-    redmine.deploy(tracker_mapping)
+    redmine = RedmineAdapter(cfg)
+    redmine.deploy(cfg.selfhosted.redmine.tracker_mapping)
 
     click.echo("\nDone.")

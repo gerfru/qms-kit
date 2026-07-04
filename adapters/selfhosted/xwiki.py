@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from typing import Any
 
 import requests
 
@@ -17,12 +18,13 @@ class XWikiAdapter:
     """
 
     def __init__(self, config: CoreConfig) -> None:
-        # TODO: extract XWiki settings from overlay config once overlay schema is wired
-        self._base_url = "http://localhost:8080"
-        self._space_key = "QMS"
-        self._username = "Admin"
+        if config.selfhosted is None:
+            raise ValueError("selfhosted config block is required for target=selfhosted")
+        xwiki = config.selfhosted.xwiki
+        self._base_url = xwiki.base_url.rstrip("/")
+        self._space_key = xwiki.space_key
+        self._username = xwiki.username
         self._password = os.environ.get("XWIKI_PASSWORD", "")
-        self._config = config
 
     @property
     def _auth(self) -> tuple[str, str]:
@@ -31,16 +33,18 @@ class XWikiAdapter:
     def _page_url(self, page_name: str) -> str:
         return f"{self._base_url}/rest/wikis/xwiki/spaces/{self._space_key}/pages/{page_name}"
 
+    def _put(self, url: str, payload: dict[str, Any]) -> None:
+        resp = requests.put(url, json=payload, auth=self._auth, timeout=30)
+        resp.raise_for_status()
+
     def page_exists(self, page_name: str) -> bool:
         resp = requests.get(self._page_url(page_name), auth=self._auth, timeout=10)
         return resp.status_code == 200
 
     def create_or_update_page(self, page_name: str, title: str, content: str) -> None:
         """Idempotent: creates the page if absent, updates content if present."""
-        url = self._page_url(page_name)
         payload = {"title": title, "content": content, "syntax": "markdown/1.2"}
-        resp = requests.put(url, json=payload, auth=self._auth, timeout=30)
-        resp.raise_for_status()
+        self._put(self._page_url(page_name), payload)
 
     def deploy(self, rendered_pages: dict[str, tuple[str, str]]) -> None:
         """Deploy all rendered pages.

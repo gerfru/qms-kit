@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from src.core.config import _deep_merge
+from src.core.config import _deep_merge, load_config
 
 CORE_YAML = Path(__file__).parent.parent / "config" / "core.yaml"
 SELFHOSTED_YAML = Path(__file__).parent.parent / "config" / "selfhosted.yaml"
@@ -63,3 +63,24 @@ class TestCoreConfig:
                 assert transition in state_ids, (
                     f"State '{state['id']}' transitions to unknown state '{transition}'"
                 )
+
+
+class TestSelfhostedConfig:
+    def test_selfhosted_overlay_loads_and_validates(self) -> None:
+        cfg = load_config(CORE_YAML, SELFHOSTED_YAML)
+        assert cfg.target == "selfhosted"
+        assert cfg.selfhosted is not None
+        assert cfg.selfhosted.xwiki.space_key == "QMS"
+        assert cfg.selfhosted.redmine.project_key == "qms"
+
+    def test_tracker_mapping_has_all_record_types(self) -> None:
+        cfg = load_config(CORE_YAML, SELFHOSTED_YAML)
+        assert cfg.selfhosted is not None
+        mapping = cfg.selfhosted.redmine.tracker_mapping
+        record_ids = {r.id for r in cfg.record_types}
+        for record_id in record_ids:
+            assert record_id in mapping, f"No tracker mapping for record type '{record_id}'"
+
+    def test_missing_selfhosted_block_gives_none(self) -> None:
+        cfg = load_config(CORE_YAML, CORE_YAML)
+        assert cfg.selfhosted is None

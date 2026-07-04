@@ -66,6 +66,24 @@ class Meta(BaseModel):
     standard: str
 
 
+class XWikiConfig(BaseModel):
+    base_url: str
+    space_key: str
+    username: str
+    parent_page: str = "QM Manual"
+
+
+class RedmineConfig(BaseModel):
+    base_url: str
+    project_key: str
+    tracker_mapping: dict[str, str]
+
+
+class SelfhostedConfig(BaseModel):
+    xwiki: XWikiConfig
+    redmine: RedmineConfig
+
+
 class CoreConfig(BaseModel):
     meta: Meta
     organisation: Organisation
@@ -75,6 +93,8 @@ class CoreConfig(BaseModel):
     record_types: list[RecordType]
     kpis: list[KPI]
     capa_states: list[CapaState]
+    target: str | None = None
+    selfhosted: SelfhostedConfig | None = None
 
     @field_validator("documents")
     @classmethod
