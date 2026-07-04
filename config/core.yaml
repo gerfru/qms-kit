@@ -46,10 +46,10 @@ clauses:
     documents: [process_map, customer_requirements_procedure, supplier_evaluation, nonconformity_procedure]
   - id: "9"
     title: "Performance Evaluation"
-    documents: [internal_audit_procedure, management_review_procedure, kpi_dashboard]
+    documents: [internal_audit_procedure, internal_audit_checklist, management_review_procedure, mgmt_review_agenda, kpi_dashboard]
   - id: "10"
     title: "Improvement"
-    documents: [capa_procedure, continual_improvement_procedure]
+    documents: [capa_procedure, capa_form, continual_improvement_procedure]
 
 documents:
   # Clause 4
@@ -130,9 +130,17 @@ documents:
     title: "Procedure: Internal Audits"
     template: procedure
     clause: "9.2"
+  - id: internal_audit_checklist
+    title: "Internal Audit Checklist"
+    template: internal_audit_checklist
+    clause: "9.2"
   - id: management_review_procedure
     title: "Procedure: Management Review"
     template: procedure
+    clause: "9.3"
+  - id: mgmt_review_agenda
+    title: "Management Review — Agenda and Minutes"
+    template: mgmt_review_agenda
     clause: "9.3"
   - id: kpi_dashboard
     title: "KPI Dashboard / Performance Indicators"
@@ -142,6 +150,10 @@ documents:
   - id: capa_procedure
     title: "Procedure: Corrective Actions (CAPA)"
     template: procedure
+    clause: "10.2"
+  - id: capa_form
+    title: "CAPA Form — Corrective Action"
+    template: capa_form
     clause: "10.2"
   - id: continual_improvement_procedure
     title: "Procedure: Continual Improvement"

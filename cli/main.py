@@ -76,7 +76,17 @@ def deploy(target: str, config_path: Path, dry_run: bool) -> None:
                 "owner_role": "Quality Management Officer",
                 "approver": config.organisation.management,
                 "author": config.organisation.quality_officer,
-                "date": "TODO",
+                "date": "TBD",
+                # Record-template placeholders — filled in per instance
+                "audit_date": "TBD",
+                "auditor": "TBD",
+                "audit_scope": "TBD",
+                "contact": "TBD",
+                "capa_id": "CAPA-XXXX-NNN",
+                "opened_date": "TBD",
+                "opened_by": "TBD",
+                "source_ref": "TBD",
+                "participants": "TBD",
             },
         )
         rendered[doc.id] = (doc.title, content)
