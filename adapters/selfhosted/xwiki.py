@@ -158,33 +158,23 @@ class XWikiAdapter:
         self._put(self._page_url(page_name, parent), payload)
 
     def deploy(self, rendered_pages: dict[str, tuple[str, str]]) -> None:
-        """Deploy all rendered pages under the parent page hierarchy.
+        """Deploy all rendered pages flat in the QMS space.
 
         Structure created:
-          QMS/                     ← space root (index page)
-          QMS/QM Manual/           ← parent page
-          QMS/QM Manual/<page>     ← all document pages
+          QMS/WebHome              ← space index page
+          QMS/<page>               ← all document pages (flat, no intermediate parent)
 
         Args:
             rendered_pages: page_name -> (title, rendered_markdown)
         """
-        # Space index page (the QMS space WebHome equivalent)
+        # Space index page
         index_entry = rendered_pages.pop("qms_index", None)
         if index_entry:
             title, content = index_entry
             self.create_or_update_page("WebHome", title, content)
             print("  XWiki: upserted space index 'WebHome'")
 
-        # Parent page: "QM Manual" at space root level
-        parent_name = self._parent_page.replace(" ", "_")
-        self.create_or_update_page(
-            parent_name,
-            self._parent_page,
-            f"= {self._parent_page} =\n\nAll QMS documents are listed below.",
-        )
-        print(f"  XWiki: upserted parent page '{self._parent_page}'")
-
-        # All document pages nested under the parent
+        # All document pages flat in the space (no intermediate parent page)
         for page_name, (title, content) in rendered_pages.items():
-            self.create_or_update_page(page_name, title, content, parent=parent_name)
-            print(f"  XWiki: upserted page '{page_name}' under '{self._parent_page}'")
+            self.create_or_update_page(page_name, title, content)
+            print(f"  XWiki: upserted page '{page_name}'")
