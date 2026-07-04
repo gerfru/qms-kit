@@ -58,7 +58,7 @@ Running `deploy` twice produces the same result without duplicates.
 
 ### CLI layer
 
-Single entry point (`python -m cli deploy --target <t> --config <f>`).
+Single entry point (`qms-kit deploy --target <t> --config <f>`).
 Orchestrates: load config → merge overlay → render templates → call adapter.
 
 ## Self-hosted Stack
