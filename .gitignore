@@ -17,6 +17,9 @@ config/clients/*
 !config/clients/.gitkeep
 !config/clients/example.yaml
 
+# Docker env file with real credentials
+docker/.env
+
 # OS
 .DS_Store
 Thumbs.db

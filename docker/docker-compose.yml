@@ -1,0 +1,80 @@
+services:
+
+  # ---------------------------------------------------------------------------
+  # XWiki — document management layer
+  # ---------------------------------------------------------------------------
+  xwiki:
+    image: xwiki:16-postgres-tomcat
+    container_name: qms-xwiki
+    depends_on:
+      xwiki-db:
+        condition: service_healthy
+    environment:
+      DB_HOST: xwiki-db
+      DB_DATABASE: xwiki
+      DB_USER: xwiki
+      DB_PASSWORD: ${XWIKI_DB_PASSWORD}
+    ports:
+      - "8080:8080"
+    volumes:
+      - xwiki-data:/usr/local/xwiki
+    restart: unless-stopped
+
+  xwiki-db:
+    image: postgres:16-alpine
+    container_name: qms-xwiki-db
+    environment:
+      POSTGRES_DB: xwiki
+      POSTGRES_USER: xwiki
+      POSTGRES_PASSWORD: ${XWIKI_DB_PASSWORD}
+    volumes:
+      - xwiki-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U xwiki"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Redmine — records and tracking layer
+  # ---------------------------------------------------------------------------
+  redmine:
+    image: redmine:5-alpine
+    container_name: qms-redmine
+    depends_on:
+      redmine-db:
+        condition: service_healthy
+    environment:
+      REDMINE_DB_POSTGRES: redmine-db
+      REDMINE_DB_DATABASE: redmine
+      REDMINE_DB_USERNAME: redmine
+      REDMINE_DB_PASSWORD: ${REDMINE_DB_PASSWORD}
+      REDMINE_SECRET_KEY_BASE: ${REDMINE_SECRET_KEY_BASE}
+    ports:
+      - "3000:3000"
+    volumes:
+      - redmine-data:/usr/src/redmine/files
+    restart: unless-stopped
+
+  redmine-db:
+    image: postgres:16-alpine
+    container_name: qms-redmine-db
+    environment:
+      POSTGRES_DB: redmine
+      POSTGRES_USER: redmine
+      POSTGRES_PASSWORD: ${REDMINE_DB_PASSWORD}
+    volumes:
+      - redmine-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U redmine"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  xwiki-data:
+  xwiki-db-data:
+  redmine-data:
+  redmine-db-data:
