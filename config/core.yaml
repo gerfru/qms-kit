@@ -1,11 +1,11 @@
-# QMS core configuration — tool-neutral  (bestätigt)
+# QMS core configuration — tool-neutral  (confirmed)
 # Defines QMS substance: clauses 4–10, documents, roles, records, KPIs, CAPA states.
 # Tool-specific details live in the overlay files (selfhosted/atlassian/m365.yaml).
 
 meta:
   version: "0.1.0"
   standard: "ISO 9001:2015"
-  # Scope: general ISO 9001, no medical devices (no ISO 13485 / IEC 62304)  (bestätigt)
+  # Scope: general ISO 9001, no medical devices (no ISO 13485 / IEC 62304)  (confirmed)
 
 organisation:
   name: "{{ org_name }}"           # set in client overlay
@@ -15,180 +15,180 @@ organisation:
 
 roles:
   - id: qmo
-    label: "QM-Beauftragter/in"
-    responsibilities: ["Dokumentenlenkung", "Interne Audits", "CAPA-Koordination"]
+    label: "Quality Management Officer"
+    responsibilities: ["Document control", "Internal audits", "CAPA coordination"]
   - id: mgmt
-    label: "Geschäftsführung"
-    responsibilities: ["Qualitätspolitik", "Management-Review", "Ressourcen"]
+    label: "Management"
+    responsibilities: ["Quality policy", "Management review", "Resources"]
   - id: process_owner
-    label: "Prozessverantwortliche/r"
-    responsibilities: ["Prozessdokumentation", "KPI-Reporting"]
+    label: "Process Owner"
+    responsibilities: ["Process documentation", "KPI reporting"]
   - id: staff
-    label: "Mitarbeitende"
-    responsibilities: ["Einhaltung der Verfahren", "NC-Meldung"]
+    label: "Staff"
+    responsibilities: ["Following procedures", "Reporting nonconformities"]
 
-# ISO 9001:2015 Gliederung Klauseln 4–10
+# ISO 9001:2015 clause structure 4–10
 clauses:
   - id: "4"
-    title: "Kontext der Organisation"
+    title: "Context of the Organisation"
     documents: [context_analysis, stakeholder_register, scope]
   - id: "5"
-    title: "Führung"
+    title: "Leadership"
     documents: [quality_policy, org_chart, management_responsibilities]
   - id: "6"
-    title: "Planung"
+    title: "Planning"
     documents: [risk_register, opportunity_register, quality_objectives]
   - id: "7"
-    title: "Unterstützung"
+    title: "Support"
     documents: [resource_plan, competence_matrix, communication_plan, documented_info_procedure]
   - id: "8"
-    title: "Betrieb"
+    title: "Operation"
     documents: [process_map, customer_requirements_procedure, nonconformity_procedure]
   - id: "9"
-    title: "Bewertung der Leistung"
+    title: "Performance Evaluation"
     documents: [internal_audit_procedure, management_review_procedure, kpi_dashboard]
   - id: "10"
-    title: "Verbesserung"
+    title: "Improvement"
     documents: [capa_procedure, continual_improvement_procedure]
 
 documents:
-  # Klausel 4
+  # Clause 4
   - id: context_analysis
-    title: "Kontextanalyse (interne/externe Themen)"
+    title: "Context Analysis (internal / external issues)"
     template: null
     clause: "4.1"
   - id: stakeholder_register
-    title: "Interessenpartner-Register"
+    title: "Interested Parties Register"
     template: null
     clause: "4.2"
   - id: scope
-    title: "Anwendungsbereich des QMS"
+    title: "QMS Scope"
     template: null
     clause: "4.3"
-  # Klausel 5
+  # Clause 5
   - id: quality_policy
-    title: "Qualitätspolitik"
+    title: "Quality Policy"
     template: policy
     clause: "5.2"
   - id: org_chart
-    title: "Organigramm / Verantwortungsmatrix"
+    title: "Organisation Chart / Responsibility Matrix"
     template: null
     clause: "5.3"
   - id: management_responsibilities
-    title: "Führungsverantwortung"
+    title: "Management Responsibilities"
     template: null
     clause: "5.1"
-  # Klausel 6
+  # Clause 6
   - id: risk_register
-    title: "Risikoregister"
+    title: "Risk Register"
     template: null
     clause: "6.1"
   - id: opportunity_register
-    title: "Chancenregister"
+    title: "Opportunity Register"
     template: null
     clause: "6.1"
   - id: quality_objectives
-    title: "Qualitätsziele und Maßnahmenplan"
+    title: "Quality Objectives and Action Plan"
     template: null
     clause: "6.2"
-  # Klausel 7
+  # Clause 7
   - id: resource_plan
-    title: "Ressourcenplanung"
+    title: "Resource Plan"
     template: null
     clause: "7.1"
   - id: competence_matrix
-    title: "Kompetenzmatrix"
+    title: "Competency Matrix"
     template: null
     clause: "7.2"
   - id: communication_plan
-    title: "Kommunikationsplan"
+    title: "Communication Plan"
     template: null
     clause: "7.4"
   - id: documented_info_procedure
-    title: "Verfahren: Lenkung dokumentierter Informationen"
+    title: "Procedure: Control of Documented Information"
     template: procedure
     clause: "7.5"
-  # Klausel 8
+  # Clause 8
   - id: process_map
-    title: "Prozesslandkarte"
+    title: "Process Map"
     template: null
     clause: "8.1"
   - id: customer_requirements_procedure
-    title: "Verfahren: Ermittlung Kundenanforderungen"
+    title: "Procedure: Determination of Customer Requirements"
     template: procedure
     clause: "8.2"
   - id: nonconformity_procedure
-    title: "Verfahren: Umgang mit Nichtkonformitäten"
+    title: "Procedure: Control of Nonconforming Outputs"
     template: procedure
     clause: "8.7"
-  # Klausel 9
+  # Clause 9
   - id: internal_audit_procedure
-    title: "Verfahren: Interne Audits"
+    title: "Procedure: Internal Audits"
     template: procedure
     clause: "9.2"
   - id: management_review_procedure
-    title: "Verfahren: Management-Review"
+    title: "Procedure: Management Review"
     template: procedure
     clause: "9.3"
   - id: kpi_dashboard
-    title: "KPI-Dashboard / Leistungskennzahlen"
+    title: "KPI Dashboard / Performance Indicators"
     template: null
     clause: "9.1"
-  # Klausel 10
+  # Clause 10
   - id: capa_procedure
-    title: "Verfahren: Korrekturmaßnahmen (CAPA)"
+    title: "Procedure: Corrective Actions (CAPA)"
     template: procedure
     clause: "10.2"
   - id: continual_improvement_procedure
-    title: "Verfahren: Kontinuierliche Verbesserung"
+    title: "Procedure: Continual Improvement"
     template: procedure
     clause: "10.3"
 
 record_types:
   - id: nc
-    label: "Nichtkonformität (NC)"
+    label: "Nonconformity (NC)"
     clause: "8.7 / 10.2"
     fields: [title, description, detected_by, detected_date, severity, root_cause, correction, correction_date, status]
   - id: capa
-    label: "Korrektur-/Vorbeugungsmaßnahme (CAPA)"
+    label: "Corrective / Preventive Action (CAPA)"
     clause: "10.2"
     fields: [title, nc_ref, root_cause, action, responsible, due_date, effectiveness_check, status]
   - id: audit
-    label: "Internes Audit"
+    label: "Internal Audit"
     clause: "9.2"
     fields: [audit_date, auditor, scope, findings, observations, result, follow_up_date]
   - id: kpi
-    label: "KPI-Messung"
+    label: "KPI Measurement"
     clause: "9.1"
     fields: [kpi_id, period, target, actual, trend, action_required]
 
 kpis:
   - id: customer_satisfaction
-    label: "Kundenzufriedenheit"
+    label: "Customer Satisfaction"
     unit: "Score 1–5"
     target: ">= 4.0"
     frequency: quarterly
     clause: "9.1.2"
   - id: nc_count
-    label: "Anzahl Nichtkonformitäten"
-    unit: "Anzahl"
-    target: "< Vorperiode"
+    label: "Number of Nonconformities"
+    unit: "count"
+    target: "< previous period"
     frequency: monthly
     clause: "9.1"
   - id: capa_closure_rate
-    label: "CAPA-Abschlussrate"
+    label: "CAPA Closure Rate"
     unit: "%"
     target: ">= 90%"
     frequency: monthly
     clause: "10.2"
   - id: audit_completion
-    label: "Auditplan-Erfüllung"
+    label: "Audit Plan Completion"
     unit: "%"
     target: "100%"
     frequency: annually
     clause: "9.2"
   - id: training_completion
-    label: "Schulungsplan-Erfüllung"
+    label: "Training Plan Completion"
     unit: "%"
     target: ">= 95%"
     frequency: annually
@@ -196,17 +196,17 @@ kpis:
 
 capa_states:
   - id: open
-    label: "Offen"
+    label: "Open"
     transitions: [in_progress, cancelled]
   - id: in_progress
-    label: "In Bearbeitung"
+    label: "In Progress"
     transitions: [effectiveness_check, cancelled]
   - id: effectiveness_check
-    label: "Wirksamkeitsprüfung"
+    label: "Effectiveness Review"
     transitions: [closed, in_progress]
   - id: closed
-    label: "Abgeschlossen"
+    label: "Closed"
     transitions: []
   - id: cancelled
-    label: "Zurückgezogen"
+    label: "Cancelled"
     transitions: []
