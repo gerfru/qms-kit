@@ -13,7 +13,7 @@ confluence:
   base_url: "TODO: https://<org>.atlassian.net/wiki"
   space_key: "TODO: QMS"
   # token via env: CONFLUENCE_API_TOKEN
-  # NOTE (belegt): approval workflow not native in Confluence Cloud.
+  # NOTE (verified): approval workflow not native in Confluence Cloud.
   # Requires Marketplace app (e.g. Comala). Partially automatable only.
 
 jira:

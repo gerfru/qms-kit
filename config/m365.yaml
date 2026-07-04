@@ -1,5 +1,5 @@
 # Microsoft 365 overlay — SharePoint (docs) + Power Automate (workflows)  [Phase 3]
-# NOTE (belegt): PnP template engine is PowerShell/.NET-native.
+# NOTE (verified): PnP template engine is PowerShell/.NET-native.
 # The m365 adapter shells out to PnP PowerShell. See adapters/m365/.
 
 target: m365
@@ -15,7 +15,7 @@ sharepoint:
   client_id: "TODO"
   tenant_id: "TODO"
   # client_secret via env: SHAREPOINT_CLIENT_SECRET
-  document_library: "QM-Dokumente"
+  document_library: "QM Documents"
 
 power_automate:
   # Place exported flow definitions in adapters/m365/flows/
