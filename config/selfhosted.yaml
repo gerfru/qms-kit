@@ -9,23 +9,24 @@ organisation:           # overrides core.yaml placeholders for this client
   quality_officer: "TODO: First Last"
   management: "TODO: First Last"
 
-xwiki:
-  base_url: "http://localhost:8080"   # TODO: production URL
-  space_key: "QMS"
-  username: "TODO"
-  # password via env: XWIKI_PASSWORD
-  parent_page: "QM Manual"
-  # [Not verified] Approval/publication workflow may require XWiki Extension.
-  # TODO: verify extension availability and configure approval_extension here.
+selfhosted:
+  xwiki:
+    base_url: "http://localhost:8080"   # TODO: production URL
+    space_key: "QMS"
+    username: "TODO"
+    # password via env: XWIKI_PASSWORD
+    parent_page: "QM Manual"
+    # [Not verified] Approval/publication workflow may require XWiki Extension.
+    # TODO: verify extension availability and configure approval_extension here.
 
-redmine:
-  base_url: "http://localhost:3000"   # TODO: production URL
-  project_key: "qms"
-  # api_key via env: REDMINE_API_KEY
-  # IMPORTANT (verified): custom field DEFINITIONS cannot be created via API.
-  # Run manual setup once before deploying. See docs/redmine-setup.md.
-  tracker_mapping:
-    nc: "Nonconformity"       # must match tracker name in Redmine
-    capa: "CAPA"
-    audit: "Internal Audit"
-    kpi: "KPI Measurement"
+  redmine:
+    base_url: "http://localhost:3000"   # TODO: production URL
+    project_key: "qms"
+    # api_key via env: REDMINE_API_KEY
+    # IMPORTANT (verified): custom field DEFINITIONS cannot be created via API.
+    # Run manual setup once before deploying. See docs/redmine-setup.md.
+    tracker_mapping:
+      nc: "Nonconformity"       # must match tracker name in Redmine
+      capa: "CAPA"
+      audit: "Internal Audit"
+      kpi: "KPI Measurement"
