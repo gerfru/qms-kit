@@ -179,7 +179,7 @@ class XWikiAdapter:
         if index_entry:
             title, content = index_entry
             self.create_or_update_page("WebHome", title, content)
-            print(f"  XWiki: upserted space index 'WebHome'")
+            print("  XWiki: upserted space index 'WebHome'")
 
         # Parent page: "QM Manual" at space root level
         parent_name = self._parent_page.replace(" ", "_")
