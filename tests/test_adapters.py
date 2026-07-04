@@ -101,7 +101,8 @@ class TestXWikiAdapter:
         mock_resp.raise_for_status.return_value = None
         with patch("adapters.selfhosted.xwiki.requests.put", return_value=mock_resp) as mock_put:
             adapter.deploy(pages)
-        assert mock_put.call_count == 2
+        # 1 parent page + 2 document pages = 3 PUT calls
+        assert mock_put.call_count == 3
 
     def test_base_url_trailing_slash_stripped(self) -> None:
         adapter = XWikiAdapter(_make_config(xwiki_url="http://xwiki.test/"))
