@@ -84,6 +84,26 @@ class SelfhostedConfig(BaseModel):
     redmine: RedmineConfig
 
 
+class ConfluenceConfig(BaseModel):
+    base_url: str  # https://mycompany.atlassian.net/wiki
+    space_key: str  # QMS
+    email: str  # atlassian account email
+    parent_page_title: str = "QM Manual"
+
+
+class JiraConfig(BaseModel):
+    base_url: str  # https://mycompany.atlassian.net
+    project_key: str  # QMS
+    project_name: str = "Quality Management System"
+    email: str  # atlassian account email (same as confluence)
+    issue_type_mapping: dict[str, str] = {}
+
+
+class AtlassianConfig(BaseModel):
+    confluence: ConfluenceConfig
+    jira: JiraConfig
+
+
 class CoreConfig(BaseModel):
     meta: Meta
     organisation: Organisation
@@ -95,6 +115,7 @@ class CoreConfig(BaseModel):
     capa_states: list[CapaState]
     target: str | None = None
     selfhosted: SelfhostedConfig | None = None
+    atlassian: AtlassianConfig | None = None
 
     @field_validator("documents")
     @classmethod
