@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import click
@@ -102,6 +103,111 @@ def deploy(target: str, config_path: Path, dry_run: bool) -> None:
         _deploy_atlassian(config, rendered)
     elif target == "m365":
         raise click.ClickException("M365 adapter not yet implemented (Phase 3).")
+
+
+_ENV_VARS: dict[str, list[str]] = {
+    "selfhosted": ["XWIKI_PASSWORD", "REDMINE_API_KEY"],
+    "atlassian": ["ATLASSIAN_API_TOKEN"],
+    "m365": ["M365_CLIENT_ID", "M365_CLIENT_SECRET", "M365_TENANT_ID"],
+}
+
+
+@cli.command()
+@click.option(
+    "--target",
+    required=True,
+    type=click.Choice(["selfhosted", "atlassian", "m365"]),
+    help="Deployment target platform.",
+)
+@click.option(
+    "--config",
+    "config_path",
+    required=True,
+    type=click.Path(exists=True, path_type=Path),
+    help="Path to the client overlay config.",
+)
+def validate(target: str, config_path: Path) -> None:
+    """Validate config and environment for a target — no changes written.
+
+    Exits 0 if everything is ready to deploy, 1 if any check fails.
+    Suitable for use in CI pipelines before a deploy step.
+    """
+    errors: list[str] = []
+
+    # Config load + schema validation
+    core_path = CONFIG_DIR / "core.yaml"
+    click.echo(f"Loading config: core={core_path}, overlay={config_path}")
+    try:
+        config = load_config(core_path, config_path)
+    except Exception as exc:
+        raise click.ClickException(f"Config invalid: {exc}") from exc
+    click.echo(
+        f"Config loaded: {config.organisation.name} "
+        f"({config.meta.standard}, {len(config.documents)} documents)"
+    )
+
+    # Target-specific config block
+    if target == "selfhosted" and config.selfhosted is None:
+        errors.append("selfhosted config block missing in overlay")
+    if target == "atlassian" and config.atlassian is None:
+        errors.append("atlassian config block missing in overlay")
+
+    # Required env vars
+    missing_vars = [v for v in _ENV_VARS.get(target, []) if not os.environ.get(v)]
+    for var in missing_vars:
+        errors.append(f"env var not set: {var}")
+
+    # Template rendering
+    click.echo("Rendering templates...")
+    render_errors = 0
+    try:
+        render_template("qms_index.md.j2", config=config, templates_dir=TEMPLATES_DIR)
+    except Exception as exc:
+        errors.append(f"qms_index.md.j2: {exc}")
+        render_errors += 1
+
+    for doc in config.documents:
+        if doc.template is None:
+            continue
+        try:
+            render_template(
+                f"{doc.template}.md.j2",
+                config=config,
+                templates_dir=TEMPLATES_DIR,
+                extra={
+                    "procedure_title": doc.title,
+                    "doc_id": f"QMS-{doc.clause}-{doc.id.upper()[:8]}",
+                    "clause": doc.clause,
+                    "owner_role": "Quality Management Officer",
+                    "approver": config.organisation.management,
+                    "author": config.organisation.quality_officer,
+                    "date": "TBD",
+                    "audit_date": "TBD",
+                    "auditor": "TBD",
+                    "audit_scope": "TBD",
+                    "contact": "TBD",
+                    "capa_id": "CAPA-XXXX-NNN",
+                    "opened_date": "TBD",
+                    "opened_by": "TBD",
+                    "source_ref": "TBD",
+                    "participants": "TBD",
+                },
+            )
+        except Exception as exc:
+            errors.append(f"{doc.template}.md.j2: {exc}")
+            render_errors += 1
+
+    templated = sum(1 for d in config.documents if d.template) + 1  # +1 for index
+    rendered_ok = templated - render_errors
+    click.echo(f"  {rendered_ok}/{templated} templates rendered successfully")
+
+    if errors:
+        click.echo("\nValidation FAILED:")
+        for err in errors:
+            click.echo(f"  ✗ {err}")
+        raise click.ClickException(f"{len(errors)} check(s) failed.")
+
+    click.echo(f"\nValidation OK — ready to deploy --target {target}")
 
 
 def _deploy_atlassian(config: object, rendered: dict[str, tuple[str, str]]) -> None:
