@@ -7,6 +7,8 @@
 A reusable deployment kit that scaffolds an audit-ready QMS into your tool of choice on day one.
 Fill in your organisation's content over the following two weeks.
 
+[![CI](https://github.com/gerfru/qms-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/gerfru/qms-kit/actions/workflows/ci.yml)
+![License](https://img.shields.io/badge/License-AGPL--3.0-blue?style=flat-square)
 ![Python](https://img.shields.io/badge/Python-3.12+-3776AB?style=flat-square&logo=python&logoColor=white)
 ![YAML](https://img.shields.io/badge/Config-YAML-CB171E?style=flat-square&logo=yaml&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)
@@ -172,6 +174,12 @@ Three layers above the adapters: a config loader with Pydantic schema validation
 template renderer, and a single CLI entry point (`qms-kit deploy --target`).
 
 ---
+
+---
+
+## License
+
+[AGPL-3.0](LICENSE) © Gerald Fruhmann
 
 <div align="center">
 <sub>Built for consultants who'd rather configure once and deploy everywhere.</sub>
