@@ -1,27 +1,31 @@
-# Atlassian overlay — Confluence (docs) + Jira (records)  [Phase 2, not yet implemented]
-# TODO: fill all fields before running: deploy --target atlassian
+# Atlassian Cloud overlay — merge over config/core.yaml
+# Copy to config/clients/<client>.yaml and fill in the values.
+# Never commit files from config/clients/ (gitignored).
+# Secret: export ATLASSIAN_API_TOKEN=<your-api-token>
+# One token covers both Confluence and Jira (same Atlassian account).
 
 target: atlassian
 
 organisation:
-  name: "TODO"
-  short: "TODO"
-  quality_officer: "TODO"
-  management: "TODO"
+  name: "Acme GmbH"
+  short: "ACME"
+  quality_officer: "Jane Smith"
+  management: "John Doe"
 
-confluence:
-  base_url: "TODO: https://<org>.atlassian.net/wiki"
-  space_key: "TODO: QMS"
-  # token via env: CONFLUENCE_API_TOKEN
-  # NOTE (verified): approval workflow not native in Confluence Cloud.
-  # Requires Marketplace app (e.g. Comala). Partially automatable only.
+atlassian:
+  confluence:
+    base_url: "https://acme.atlassian.net/wiki"   # trailing /wiki required
+    space_key: "QMS"
+    email: "jane.smith@acme.com"
+    parent_page_title: "QM Manual"
 
-jira:
-  base_url: "TODO: https://<org>.atlassian.net"
-  project_key: "TODO: QMS"
-  # token via env: JIRA_API_TOKEN
-  issue_type_mapping:
-    nc: "TODO"
-    capa: "TODO"
-    audit: "TODO"
-    kpi: "TODO"
+  jira:
+    base_url: "https://acme.atlassian.net"
+    project_key: "QMS"
+    project_name: "Quality Management System"
+    email: "jane.smith@acme.com"
+    issue_type_mapping:
+      nc: "Nonconformity"
+      capa: "Corrective Action"
+      audit: "Internal Audit"
+      kpi: "KPI Measurement"
