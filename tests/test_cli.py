@@ -1,4 +1,4 @@
-"""Unit tests for the CLI deploy command."""
+"""Unit tests for the CLI deploy and validate commands."""
 
 from pathlib import Path
 from unittest.mock import patch
@@ -9,6 +9,7 @@ from cli.main import cli
 
 CORE_YAML = Path(__file__).parent.parent / "config" / "core.yaml"
 SELFHOSTED_YAML = Path(__file__).parent.parent / "config" / "selfhosted.yaml"
+ATLASSIAN_YAML = Path(__file__).parent.parent / "config" / "atlassian.yaml"
 
 
 class TestDeployDryRun:
@@ -87,3 +88,64 @@ class TestDeployLive:
         assert result.exit_code == 0, result.output
         mock_xwiki.assert_called_once()
         mock_redmine.assert_called_once()
+
+
+class TestValidate:
+    def test_validate_selfhosted_ok_with_env(self) -> None:
+        runner = CliRunner()
+        result = runner.invoke(
+            cli,
+            ["validate", "--target", "selfhosted", "--config", str(SELFHOSTED_YAML)],
+            env={"XWIKI_PASSWORD": "Admin", "REDMINE_API_KEY": "abc123"},
+        )
+        assert result.exit_code == 0, result.output
+        assert "Validation OK" in result.output
+
+    def test_validate_selfhosted_fails_missing_env(self) -> None:
+        runner = CliRunner()
+        result = runner.invoke(
+            cli,
+            ["validate", "--target", "selfhosted", "--config", str(SELFHOSTED_YAML)],
+            env={},
+        )
+        assert result.exit_code != 0
+        assert "XWIKI_PASSWORD" in result.output
+        assert "REDMINE_API_KEY" in result.output
+
+    def test_validate_atlassian_fails_wrong_config_block(self) -> None:
+        # selfhosted.yaml has no atlassian block
+        runner = CliRunner()
+        result = runner.invoke(
+            cli,
+            ["validate", "--target", "atlassian", "--config", str(SELFHOSTED_YAML)],
+            env={"ATLASSIAN_API_TOKEN": "tok"},
+        )
+        assert result.exit_code != 0
+        assert "atlassian config block missing" in result.output
+
+    def test_validate_atlassian_ok_with_atlassian_config(self) -> None:
+        runner = CliRunner()
+        result = runner.invoke(
+            cli,
+            ["validate", "--target", "atlassian", "--config", str(ATLASSIAN_YAML)],
+            env={"ATLASSIAN_API_TOKEN": "tok"},
+        )
+        assert result.exit_code == 0, result.output
+        assert "Validation OK" in result.output
+
+    def test_validate_missing_config_file_exits_nonzero(self) -> None:
+        runner = CliRunner()
+        result = runner.invoke(
+            cli,
+            ["validate", "--target", "selfhosted", "--config", "nonexistent.yaml"],
+        )
+        assert result.exit_code != 0
+
+    def test_validate_prints_rendered_count(self) -> None:
+        runner = CliRunner()
+        result = runner.invoke(
+            cli,
+            ["validate", "--target", "selfhosted", "--config", str(SELFHOSTED_YAML)],
+            env={"XWIKI_PASSWORD": "x", "REDMINE_API_KEY": "x"},
+        )
+        assert "templates rendered successfully" in result.output

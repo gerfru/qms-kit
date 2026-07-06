@@ -11,6 +11,7 @@ Fill in your organisation's content over the following two weeks.
 ![YAML](https://img.shields.io/badge/Config-YAML-CB171E?style=flat-square&logo=yaml&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)
 ![XWiki](https://img.shields.io/badge/Self--hosted-XWiki%20%2B%20Redmine-10B981?style=flat-square)
+![Atlassian](https://img.shields.io/badge/Atlassian-Confluence%20%2B%20Jira-0052CC?style=flat-square&logo=atlassian&logoColor=white)
 ![ISO 9001](https://img.shields.io/badge/ISO%209001-Clauses%204–10-0057B8?style=flat-square)
 
 [Quickstart](#-quickstart) · [What gets deployed](#-what-gets-deployed) · [Targets](#-deployment-targets) · [Docs](#-documentation)
@@ -57,7 +58,7 @@ or SharePoint + Power Automate (M365). Reuse the same kit for every client; swap
 
 ## 🚀 Quickstart
 
-Self-hosted target (XWiki + Redmine via Docker Compose):
+### Self-hosted (XWiki + Redmine via Docker Compose)
 
 ```bash
 # 1. Clone and install
@@ -73,13 +74,13 @@ docker compose -f docker/docker-compose.yml up -d
 # See docs/redmine-setup.md
 
 # 4. Create your client overlay
-cp config/clients/example.yaml config/clients/acme.yaml
+cp config/selfhosted.yaml config/clients/acme.yaml
 # edit acme.yaml: org name, URLs, credentials
 
-# 5. Dry-run first (no changes written)
+# 5. Validate (checks config + env vars, no writes)
 export XWIKI_PASSWORD=Admin
 export REDMINE_API_KEY=<your-key>
-qms-kit deploy --target selfhosted --config config/clients/acme.yaml --dry-run
+qms-kit validate --target selfhosted --config config/clients/acme.yaml
 
 # 6. Deploy
 qms-kit deploy --target selfhosted --config config/clients/acme.yaml
@@ -91,6 +92,35 @@ qms-kit deploy --target selfhosted --config config/clients/acme.yaml
 
 → Full walkthrough: **[docs/setup.md](docs/setup.md)**
 
+### Atlassian Cloud (Confluence + Jira)
+
+Requirements: an Atlassian Cloud account with admin access to a Confluence space and a Jira project.
+
+```bash
+# 1. Clone and install (same as above)
+git clone https://github.com/gerfru/qms-kit.git
+cd qms-kit
+uv sync
+
+# 2. Create your client overlay from the Atlassian template
+cp config/atlassian.yaml config/clients/acme.yaml
+# edit acme.yaml: org name, base_url (https://<org>.atlassian.net), email,
+#                 space_key, project_key
+
+# 3. Generate an API token at id.atlassian.com → Security → API tokens
+export ATLASSIAN_API_TOKEN=<your-api-token>
+
+# 4. Validate (checks config + token presence, no writes)
+qms-kit validate --target atlassian --config config/clients/acme.yaml
+
+# 5. Deploy
+qms-kit deploy --target atlassian --config config/clients/acme.yaml
+```
+
+> **One token, two services:** `ATLASSIAN_API_TOKEN` is used for both
+> Confluence and Jira. The email in your overlay config must match the
+> token owner's Atlassian account.
+
 ---
 
 ## 🎯 Deployment targets
@@ -98,8 +128,8 @@ qms-kit deploy --target selfhosted --config config/clients/acme.yaml
 | Target | Status | Stack |
 |--------|--------|-------|
 | **Self-hosted** | ✅ Phase 1 complete | XWiki (docs) + Redmine (records) via Docker |
-| **Atlassian** | 🔜 Phase 2 | Confluence + Jira via REST API |
-| **Microsoft 365** | 🔜 Phase 3 | SharePoint + Power Automate via PnP PowerShell |
+| **Atlassian** | ✅ Phase 2 complete | Confluence + Jira via REST API |
+| **Microsoft 365** | 🔜 Phase 3 | SharePoint + Planner via Microsoft Graph API |
 
 > **Atlassian note:** Approval workflows and versioning are not native to Confluence Cloud
 > — a Marketplace app (e.g. Comala) is required; that part is only partially automatable.
@@ -121,7 +151,7 @@ qms-kit deploy --target selfhosted --config config/clients/acme.yaml
 
 ## 🧱 Stack
 
-Python · Jinja2 · Pydantic · YAML · Click · Docker Compose · XWiki REST API · Redmine REST API
+Python · Jinja2 · Pydantic · YAML · Click · Docker Compose · XWiki REST API · Redmine REST API · Confluence REST API v2 · Jira REST API v3
 
 Three layers above the adapters: a config loader with Pydantic schema validation, a Jinja2
 template renderer, and a single CLI entry point (`qms-kit deploy --target`).
