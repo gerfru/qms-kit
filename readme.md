@@ -121,6 +121,21 @@ qms-kit deploy --target atlassian --config config/clients/acme.yaml
 > Confluence and Jira. The email in your overlay config must match the
 > token owner's Atlassian account.
 
+### Export (M365 / local archive)
+
+No API credentials needed — generates files you can upload to any document library.
+
+```bash
+# Export as standalone HTML (recommended for SharePoint document libraries)
+qms-kit export --format html --config config/clients/acme.yaml --output-dir ./qms-export
+
+# Export as plain Markdown (version control, email, local archive)
+qms-kit export --format md --config config/clients/acme.yaml --output-dir ./qms-export
+```
+
+The `--output-dir` defaults to `./qms-export/`. HTML output includes an `index.html`
+with links to all documents and a "← Back" navigation link on every page.
+
 ---
 
 ## 🎯 Deployment targets
@@ -129,7 +144,7 @@ qms-kit deploy --target atlassian --config config/clients/acme.yaml
 |--------|--------|-------|
 | **Self-hosted** | ✅ Phase 1 complete | XWiki (docs) + Redmine (records) via Docker |
 | **Atlassian** | ✅ Phase 2 complete | Confluence + Jira via REST API |
-| **Microsoft 365** | 🔜 Phase 3 | SharePoint + Planner via Microsoft Graph API |
+| **Export (M365 / archive)** | ✅ Phase 3 complete | Markdown + standalone HTML via `qms-kit export` |
 
 > **Atlassian note:** Approval workflows and versioning are not native to Confluence Cloud
 > — a Marketplace app (e.g. Comala) is required; that part is only partially automatable.
