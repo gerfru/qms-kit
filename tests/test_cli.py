@@ -63,7 +63,7 @@ class TestDeployLive:
             ["deploy", "--target", "atlassian", "--config", str(SELFHOSTED_YAML)],
         )
         assert result.exit_code != 0
-        assert "not yet implemented" in result.output
+        assert "atlassian config block missing" in result.output
 
     def test_m365_target_raises_click_exception(self) -> None:
         runner = CliRunner()
