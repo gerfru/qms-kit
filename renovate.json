@@ -1,0 +1,43 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "pinDigests": true,
+  "platformAutomerge": true,
+  "packageRules": [
+    {
+      "description": "Python dev-dep patch updates: safe to automerge",
+      "matchManagers": ["pep621"],
+      "matchDepTypes": ["dev"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "description": "Python prod-dep patch updates: manual review",
+      "matchManagers": ["pep621"],
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": false,
+      "labels": ["dependencies"]
+    },
+    {
+      "description": "Python minor/major updates: manual review",
+      "matchManagers": ["pep621"],
+      "matchUpdateTypes": ["minor", "major"],
+      "automerge": false,
+      "labels": ["dependencies", "review-needed"]
+    },
+    {
+      "description": "GitHub Actions patch updates: safe to automerge",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "description": "GitHub Actions minor/major updates: manual review (actions execute code)",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "major"],
+      "automerge": false,
+      "labels": ["dependencies", "review-needed"]
+    }
+  ]
+}
