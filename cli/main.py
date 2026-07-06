@@ -99,9 +99,29 @@ def deploy(target: str, config_path: Path, dry_run: bool) -> None:
     if target == "selfhosted":
         _deploy_selfhosted(config, rendered)
     elif target == "atlassian":
-        raise click.ClickException("Atlassian adapter not yet implemented (Phase 2).")
+        _deploy_atlassian(config, rendered)
     elif target == "m365":
         raise click.ClickException("M365 adapter not yet implemented (Phase 3).")
+
+
+def _deploy_atlassian(config: object, rendered: dict[str, tuple[str, str]]) -> None:
+    from adapters.atlassian.confluence import ConfluenceAdapter
+    from adapters.atlassian.jira import JiraAdapter
+    from src.core.config import CoreConfig
+
+    cfg = config if isinstance(config, CoreConfig) else None
+    if cfg is None or cfg.atlassian is None:
+        raise click.ClickException("atlassian config block missing in overlay.")
+
+    click.echo("\nDeploying to Atlassian Cloud (Confluence + Jira)...")
+
+    confluence = ConfluenceAdapter(cfg)
+    confluence.deploy(rendered)
+
+    jira = JiraAdapter(cfg)
+    jira.deploy(cfg.atlassian.jira.issue_type_mapping)
+
+    click.echo("\nDone.")
 
 
 def _deploy_selfhosted(config: object, rendered: dict[str, tuple[str, str]]) -> None:
